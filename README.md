@@ -1,18 +1,33 @@
 # Conference Paper Setup Guide
 
+## Conference Information
+**Conference:** 2026 IEEE World Congress on Computational Intelligence (WCCI 2026)  
+**Special Session:** IJCNN SS07 - Quantum Machine Learning Algorithms and Applications  
+**Location:** Maastricht, Netherlands  
+**Dates:** June 21-26, 2026  
+**Submission Deadline:** January 31, 2026 (23:59 UTC-12)  
+**Acceptance Notification:** March 15, 2026  
+**Camera Ready:** April 15, 2026  
+
+**Conference Website:** https://attend.ieee.org/wcci-2026/  
+**Special Session:** https://sites.google.com/view/qml-wcci-2026/home
+
 ## Paper Title
-**Equilibrium Propagation and Variational Quantum Circuits for Medical Image Analysis**
+**Equilibrium Propagation and Variational Quantum Circuits for Automated Detection of Acute Myeloid Leukemia from Blood Cell Microscopy Images**
 
 ## Quick Status Checklist
 - [ ] LaTeX installed (TeXShop or MacTeX)
-- [ ] IEEE conference .cls file obtained and placed in this directory
-- [ ] Author information updated in paper.tex
-- [ ] Abstract reviewed and keywords finalized
-- [ ] Figures reviewed and captions adjusted if needed
+- [ ] IEEE conference .cls file (IEEEtran.cls) obtained and placed in this directory
+- [ ] Author information updated in paper.tex (lines 15-25)
+- [ ] Abstract reviewed (currently 220 words - within 150-250 range) ✓
+- [ ] Keywords optimized for QML special session ✓
+- [ ] Paper anonymized for double-blind review (remove author names before submission)
+- [ ] Figures embedded and captions finalized ✓
 - [ ] References updated with advisor's work
-- [ ] Paper compiled to PDF successfully
-- [ ] INNS membership obtained
-- [ ] Conference registration completed
+- [ ] Paper compiled to PDF successfully and verified ≤6 pages
+- [ ] Code repository published (already at GitHub) ✓
+- [ ] Paper submitted via WCCI submission system by Jan 31, 2026
+- [ ] IEEE membership obtained for reduced registration
 
 ## Installation Steps
 
@@ -63,18 +78,33 @@ pdflatex paper.tex
 
 ## Current Paper Structure
 
-### Abstract (Lines 32-34)
-- **Length:** 216 words (within 150-250 range) ✓
-- **Coverage:** Motivation, methods, results, implications ✓
-- **Keywords:** 6 keywords listed ✓
+### Abstract (Lines 32-33)
+- **Length:** 220 words (within 150-250 range) ✓
+- **Coverage:** Motivation, EP + VQC methods, comprehensive benchmarking, NISQ deployment ✓
+- **Keywords:** 6 keywords optimized for WCCI QML special session ✓
+  - equilibrium propagation
+  - variational quantum circuits
+  - quantum machine learning
+  - medical image analysis
+  - blood cell classification
+  - acute myeloid leukemia
 
-### Sections
-1. **Introduction** - Context, gap, contributions
-2. **Methods** - Dataset, EP framework, VQC design, baselines
-3. **Results** - Performance tables, scaling behavior, efficiency
-4. **Discussion** - Interpretation, limitations, future work
-5. **Conclusions** - Summary of contributions
-6. **References** - 7 citations (add 2-3 more including advisor's work)
+### Sections (Comprehensive Scientific Content)
+1. **Introduction** - NISQ context, QML background, medical imaging challenges, AML dataset significance
+2. **Methods**
+   - Dataset and Preprocessing - WHO classification, stratified sampling, PCA for VQC
+   - EP Framework - Free/nudged phase equations, 20 features, training hyperparameters
+   - VQC Design - ZZFeatureMap math, RealAmplitudes ansatz, COBYLA optimization
+   - Classical Baselines - Enhanced CNN, Dense NN specifications
+3. **Results**
+   - Overall Performance - Detailed metrics table with sample counts
+   - Scaling Behavior - Data efficiency analysis across 4 dataset sizes
+   - Computational Efficiency - Pareto frontier analysis
+   - Clinical Metrics - Precision/recall/F1 table for EP and VQC
+4. **Discussion** - Neuromorphic hardware, NISQ constraints, limitations, federated QML future directions
+5. **Conclusions** - NISQ-era validation, translation to clinical practice
+6. **Acknowledgments** - Dataset credit, code availability statement
+7. **References** - 12 high-quality citations (Nature, IEEE, etc.)
 
 ### Figures Included
 - `figure1_accuracy_comparison.png` - Accuracy across dataset sizes
@@ -107,24 +137,39 @@ pdflatex paper.tex
 
 ## Conference Logistics
 
-### INNS Membership
-1. Visit: https://www.inns.org/membership
-2. Select "Student Member" (~$15/year)
-3. Complete registration and payment
-4. Save membership confirmation
+### IMPORTANT: Double-Blind Review
+WCCI 2026 uses **double-blind review**. Before submitting:
+1. Remove author names and affiliations from paper.tex (lines 14-26)
+2. Remove Acknowledgments section (or anonymize it)
+3. Do NOT include identifying information in PDF metadata
+4. Keep code repository link in final camera-ready version only
+
+### IEEE Membership (Recommended)
+1. Visit: https://www.ieee.org/membership
+2. Select "Student Member" (~$32/year) or "Graduate Student Member"
+3. Join IEEE Computational Intelligence Society (CIS) as well for additional discount
+4. Use membership number during conference registration for reduced fees
 
 ### Conference Registration
-1. After INNS membership is confirmed
-2. Register for conference in Maastricht
-3. Use student member discount code
-4. Register early for best rates
+1. Paper must be **accepted first** (notification: March 15, 2026)
+2. Register by early registration deadline (typically ~April 15)
+3. At least one author must register and present
+4. Student registration rates available (~€400-600)
+5. Registration covers conference proceedings and IEEE Xplore publication
+
+### Travel to Maastricht
+- **Flights:** Nearest airport is Maastricht Aachen Airport (MST) or Amsterdam Schiphol (AMS, 2.5h train)
+- **Accommodation:** Book early (June is peak conference season)
+- **Visa:** Check if you need Schengen visa (apply 3+ months in advance)
 
 ### Travel Grants
 Consider applying for:
-- INNS student travel grants
-- University research travel funds
+- IEEE CIS Student Travel Grants (check CIS website for deadlines)
+- University research/conference travel funds
 - NSF or other federal student grants
+- Graduate student organization funding
 - Reference your NASA and Rutgers support in applications
+- **Deadline:** Most travel grants require 2-3 months notice, apply by March 2026
 
 ## Technical Details
 
