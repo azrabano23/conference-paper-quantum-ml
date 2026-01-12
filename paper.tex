@@ -177,11 +177,11 @@ In contrast, EP demonstrates remarkably stable performance: 80.0\% (50) $\to$ 78
 
 Most strikingly, the VQC maintains essentially constant 83\% accuracy across all dataset sizes (80-83\% range), exhibiting superior data efficiency to all classical methods. This behavior aligns with theoretical predictions that quantum kernel methods can achieve good generalization with exponentially fewer training samples \cite{Havlicek2019}. The VQC's immunity to dataset scale suggests quantum feature encoding successfully captures discriminative patterns even from minimal examples—a transformative property for rare disease detection where data scarcity is endemic.
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
-\includegraphics[width=0.48\textwidth]{figures/figure1_accuracy_comparison.png}
-\caption{Accuracy comparison across dataset sizes for all methods.}
-\label{fig:accuracy}
+\includegraphics[width=0.48\textwidth]{figures/fig1_method_comparison.png}
+\caption{Accuracy-efficiency trade-off showing VQC and EP as competitive alternatives to CNN, with Dense NN offering ultrafast training. VQC achieves 83\% accuracy suitable for NISQ hardware.}
+\label{fig:comparison}
 \end{figure}
 
 \subsection{Computational Efficiency Analysis}
@@ -192,11 +192,18 @@ EP positions at an intermediate point: 86.4\% accuracy in 89.4s (0.97\% accuracy
 
 VQC training time (180s for 83\% accuracy = 0.46\% accuracy/s) reflects classical simulation overhead. However, this comparison is fundamentally unfair: simulating $n$ qubits requires $2^n$-dimensional state vectors, imposing exponential memory/time costs ($2^4=16$ complex amplitudes for our 4-qubit circuit). Actual quantum hardware would execute the entire circuit in microseconds, with training time dominated by classical optimizer iterations—likely comparable to or faster than EP. Additionally, quantum parallelism enables simultaneous evaluation of multiple parameter configurations, potentially accelerating hyperparameter optimization.
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
-\includegraphics[width=0.48\textwidth]{figures/figure2_efficiency_analysis.png}
-\caption{Training efficiency analysis showing accuracy-time trade-offs.}
+\includegraphics[width=0.48\textwidth]{figures/fig2_data_efficiency.png}
+\caption{Left: Data efficiency analysis showing VQC maintains constant 83\% accuracy across dataset scales, demonstrating superior sample efficiency. Right: 20-feature engineering breakdown for EP and VQC input.}
 \label{fig:efficiency}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.48\textwidth]{figures/fig3_vqc_architecture.png}
+\caption{VQC architecture: 20D features reduced via PCA to 4D, encoded with ZZFeatureMap (entangling gates), processed through RealAmplitudes ansatz (8 trainable parameters), and measured on first qubit for binary classification.}
+\label{fig:vqc}
 \end{figure}
 
 \subsection{Clinical Metrics and Error Analysis}
