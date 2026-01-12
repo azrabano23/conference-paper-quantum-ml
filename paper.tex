@@ -10,7 +10,7 @@
 \usepackage{multirow}
 
 % Title and authors
-\title{Equilibrium Propagation and Variational Quantum Circuits for Automated Detection of Acute Myeloid Leukemia from Blood Cell Microscopy Images}
+\title{Analyzing Images of Blood Cells with Quantum Machine Learning Methods: Equilibrium Propagation and Variational Quantum Circuits to Detect Acute Myeloid Leukemia}
 
 \author{
 \IEEEauthorblockN{Azra Zrabano}
@@ -31,11 +31,11 @@ advisor.email@university.edu}
 \maketitle
 
 \begin{abstract}
-Quantum machine learning offers transformative potential for medical image analysis through quantum parallelism and entanglement-based feature encoding. We present comprehensive implementations of equilibrium propagation (EP), a biologically-inspired energy-based learning algorithm, and variational quantum circuits (VQCs) for automated detection of Acute Myeloid Leukemia (AML) from blood cell microscopy images. Using a clinical dataset of 18,365 manually annotated images from Munich University Hospital, we systematically evaluate both approaches against classical baselines across varying dataset sizes (50-250 samples per class). Our EP implementation achieves 86.4\% accuracy using a 256-128-64 architecture with 20 engineered statistical, textural, and morphological features, trained via energy minimization without backpropagation. The 4-qubit VQC employs ZZFeatureMap encoding with RealAmplitudes ansatz, achieving 83\% accuracy with robust performance across dataset scales. Comprehensive benchmarking reveals EP training completes in 89.4s with 0.13s inference, while VQC requires 180s training (simulation-limited) with 1.0s inference. Results demonstrate quantum-inspired and quantum approaches achieve clinically relevant accuracy while offering advantages for neuromorphic and NISQ-era quantum hardware deployment.
+Quantum Machine Learning offers transformative potential for medical image analysis through quantum parallelism and entanglement-based feature encoding. We present a feasibility study testing Quantum Machine Learning algorithms on a real-world medical imaging task: automated detection of Acute Myeloid Leukemia (AML) from blood cell microscopy images. Using limited subsets (50-250 samples per class) from a clinical dataset of 18,365 images, we implement Equilibrium Propagation (EP) and Variational Quantum Circuits (VQCs) and evaluate performance using classical simulation on standard laptop hardware rather than actual quantum computers. Despite working with reduced image resolution (64×64 pixels) and limited samples, EP achieves 86.4\% accuracy through energy-based learning, while the 4-qubit VQC simulated via Qiskit achieves 83\% accuracy with remarkable data efficiency across all dataset scales. This study demonstrates what Quantum algorithms can accomplish on typical computing platforms, establishing feasibility for future deployment on actual quantum hardware. Notably, EP avoids backpropagation—which is incompatible with Quantum systems since measurements collapse quantum states. Code is publicly available to facilitate reproducibility.
 \end{abstract}
 
 \begin{IEEEkeywords}
-equilibrium propagation, variational quantum circuits, quantum machine learning, medical image analysis, blood cell classification, acute myeloid leukemia
+Equilibrium Propagation, Variational Quantum Circuits, Quantum Machine Learning, medical image analysis, blood cell classification, Acute Myeloid Leukemia
 \end{IEEEkeywords}
 
 \section{Introduction}
