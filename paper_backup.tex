@@ -58,7 +58,7 @@ lsl2140@columbia.edu}
 \begin{abstract}
 This paper presents a feasibility study testing Quantum Machine Learning (QML) algorithms on a real-world medical imaging task using standard laptop hardware rather than actual quantum computers. We evaluate Equilibrium Propagation (EP)—an energy-based learning method that avoids backpropagation, which is incompatible with Quantum systems since backpropagation requires measurements that collapse quantum states—and Variational Quantum Circuits (VQCs) for automated detection of Acute Myeloid Leukemia (AML) from blood cell microscopy images.
 
-Using limited subsets (50--250 samples per class) of the AML-Cytomorphology dataset (18,365 expert-annotated images), we demonstrate what Quantum algorithms can accomplish despite constraints: reduced image resolution (64×64 pixels vs. original high-resolution), limited training samples, and classical simulation via Qiskit rather than quantum hardware. EP achieves 86.4\% accuracy with energy-based learning, while the simulated 4-qubit VQC attains 83.0\% accuracy. Critically, VQC demonstrates superior data efficiency: maintaining 83\% accuracy with only 50 samples per class, whereas CNN requires 250 samples to achieve 98\% accuracy—a 5$\times$ data advantage relevant for medical imaging where expert annotations cost \$100--500 per image. These results establish a reproducible benchmark for Quantum Machine Learning in medical imaging, validating NISQ-era feasibility.
+Using limited subsets (50--250 samples per class) of the AML-Cytomorphology dataset (18,365 expert-annotated images), we demonstrate what Quantum algorithms can accomplish despite constraints: reduced image resolution (64×64 pixels vs. original high-resolution), limited training samples, and classical simulation via Qiskit rather than quantum hardware. EP achieves 86.4\% accuracy with energy-based learning, while the simulated 4-qubit VQC attains 83.0\% accuracy with remarkable stability across dataset scales. These results establish a reproducible benchmark for Quantum-inspired and Quantum learning in medical imaging, validating feasibility for future deployment on actual quantum processors.
 \end{abstract}
 
 
@@ -88,11 +88,6 @@ This paper evaluates EP and VQC models on AML detection from blood cell microsco
 
 \textbf{Open Science Note:} upon acceptance of our paper, we will will make our data/code available online.
 
-\section{Related Work}
-
-Quantum Machine Learning for medical imaging remains an emerging field. Prior work includes quantum support vector machines for MRI tumor classification \cite{Havlicek2019} and preliminary VQC studies on synthetic histopathology data. However, systematic benchmarks on large-scale clinical datasets with expert annotations are limited. Recent surveys \cite{Benedetti2019} identify key challenges: (i) scaling beyond toy datasets (MNIST), (ii) handling real-world noise and class imbalance, and (iii) demonstrating practical advantages over classical methods.
-
-This work addresses these gaps by: (1) benchmarking on a clinical dataset of 18,365 expert-annotated blood cell images rather than synthetic data, (2) systematically comparing Quantum-inspired (Equilibrium Propagation) and pure Quantum (VQC) approaches under identical experimental conditions, and (3) quantifying data efficiency—a practical quantum advantage critical for medical domains where expert annotations are costly. Our 4-qubit VQC design with shallow depth (12) is explicitly optimized for near-term NISQ devices, distinguishing this from theoretical studies assuming ideal quantum computers.
 
 % =======================
 % Methods (short + clear)
@@ -118,15 +113,7 @@ This representation is consistent with practical constraints of small-qubit VQCs
 
 
 \subsection{Equilibrium Propagation Model}
-EP trains a layered energy-based network through two phases \cite{Scellier2017}. The network minimizes a global energy function:
-\begin{equation}
-E(\mathbf{s}) = -\frac{1}{2}\sum_{i,j} W_{ij}s_is_j - \sum_i b_is_i + \sum_i \rho(s_i)
-\end{equation}
-where $\mathbf{s}$ are neuron states, $W$ are connection weights, $b$ are biases, and $\rho$ is a primitive function of the activation (e.g., $\rho(s) = \int_0^s \tanh^{-1}(u)du$ for tanh activations).
-
-\textbf{Free Phase:} The network evolves via gradient descent on energy: $\tau \frac{d\mathbf{s}}{dt} = -\frac{\partial E}{\partial \mathbf{s}}$, settling to equilibrium $\mathbf{s}^*$. \textbf{Nudged Phase:} Output neurons are weakly clamped toward targets $\mathbf{y}$ with nudging strength $\beta=0.1$, producing equilibrium $\mathbf{s}^\beta$. Weight updates use: $\Delta W_{ij} \propto (s_i^\beta s_j^\beta - s_i^* s_j^*)/\beta$.
-
-The EP architecture comprises hidden layers (256--128--64 units, tanh activations) and a 2-unit output layer. Training employs momentum SGD ($\mu=0.9$), cosine annealing learning rate, and early stopping (patience=15 epochs) to prevent overfitting on limited samples.
+EP trains a layered energy-based network through two phases \cite{Scellier2017}. In the free phase, the network relaxes to an equilibrium state given an input. In the nudged phase, output units are weakly biased toward target labels; parameter updates are computed from the difference between the two equilibria. The EP architecture used here is a fully connected network with hidden sizes 256--128--64 and a 2-unit output layer. Training uses momentum updates and early stopping to avoid overfitting on small subsets.
 
 
 \subsection{Variational Quantum Circuit Classifier}
@@ -147,7 +134,7 @@ Table~\ref{tab:main} reports accuracy and runtime on 250 samples per class. EP r
 
 \begin{table}[t]
 \centering
-\caption{Performance on 250 samples per class (averaged over 3 random seeds, std $<$2\%). Runtimes reflect Qiskit simulation on laptop hardware (Intel Core i7, 16GB RAM) and do not represent actual quantum computer execution times.}
+\caption{Performance on 250 samples per class. Runtimes reflect classical simulation on laptop hardware and do not represent actual quantum computer execution times.}
 \label{tab:main}
 \begin{tabular}{|l|c|c|c|}
 \hline
@@ -168,51 +155,36 @@ Figure~\ref{fig:acc} summarizes accuracy across dataset scales (50--250 samples/
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.48\textwidth]{fig1_method_comparison.png}
-\caption{Accuracy vs. training time showing EP and VQC competitive positioning. VQC achieves 83\% accuracy (NISQ-suitable), while EP reaches 86.4\% without backpropagation.}
+\includegraphics[width=0.48\textwidth]{figure1_accuracy_comparison.png}
+\caption{Accuracy across dataset sizes for classical baselines, EP, and VQC.}
 \label{fig:acc}
 \end{figure}
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.48\textwidth]{fig2_data_efficiency.png}
-\caption{Data efficiency: VQC maintains stable 83\% accuracy from 50--250 samples (left), demonstrating superior sample efficiency versus CNN (92\%$\to$98.4\%). Right: 20-feature breakdown for EP/VQC input.}
-\label{fig:eff}
-\end{figure}
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.48\textwidth]{fig3_vqc_architecture.png}
-\caption{VQC architecture: 20D features$\to$PCA$\to$4D$\to$ZZFeatureMap (entangling gates)$\to$RealAmplitudes ansatz (8 parameters, depth 12)$\to$ expectation measurement $\langle Z_0 \rangle$ for binary classification.}
-\label{fig:arch}
-\end{figure}
+% Optional second figure if you have room:
+% \begin{figure}[t]
+% \centering
+% \includegraphics[width=0.48\textwidth]{figure2_efficiency_analysis.png}
+% \caption{Accuracy vs training time trade-offs.}
+% \label{fig:eff}
+% \end{figure}
 
 
 % =======================
 % Discussion (tight + careful)
 % =======================
 \section{Discussion}
+EP provides a competitive accuracy--efficiency trade-off while avoiding explicit backpropagation, which may be advantageous for hardware-aware learning systems. The simulated VQC achieves comparable performance despite operating with only four qubits and a shallow circuit, suggesting that quantum feature encodings can be effective on compact representations of microscopy images.
 
-\subsection{Data Efficiency as Practical Quantum Advantage}
-While classical CNN achieves higher absolute accuracy (98.4\% at 250 samples/class), the VQC demonstrates superior data efficiency: maintaining 83\% accuracy with only 50 samples per class (Fig.~\ref{fig:eff}), whereas CNN accuracy degrades to 92\% at this scale. This 5:1 data efficiency represents a practical quantum advantage for medical imaging where expert annotations cost \$100--500 per image requiring 2--5 hours of specialist time \cite{Matek2021}. For a dataset requiring 500 expert-annotated samples, VQC could achieve comparable clinical utility (83\% sensitivity/specificity) at 1/5th the annotation cost (\$10,000 vs. \$50,000), enabling feasibility studies for rare diseases where large datasets are impractical.
 
-\subsection{Equilibrium Propagation for Neuromorphic Deployment}
-EP provides competitive accuracy (86.4\%) while avoiding backpropagation—essential for Quantum systems where gradient computation requires state-collapsing measurements. The 89.4s CPU-only training time and 0.13s inference demonstrate suitability for edge deployment. Projected deployment on neuromorphic chips (Intel Loihi) could reduce power consumption 250$\times$ (1W vs. 250W GPU), enabling battery-powered point-of-care diagnostics.
-
-\subsection{NISQ-Era Feasibility}
-The VQC's shallow 12-depth circuit fits within current NISQ device constraints: IBM Quantum systems support $\sim$100 qubits with 100$\mu$s coherence and 99.9\% two-qubit gate fidelity. Our 4-qubit design enables near-term hardware validation, with simulation establishing upper-bound performance before noise effects.
-
-\subsection{Limitations and Future Work}
-Key limitations: (i) VQC uses ideal statevector simulation—real hardware would exhibit shot noise, gate errors, and decoherence degrading accuracy; (ii) feature engineering limits representational capacity versus end-to-end CNNs; (iii) binary classification (AML vs. healthy) is simpler than multi-class hematology (5--10 cell types). Future work includes: shot-based sampling experiments, error mitigation strategies (zero-noise extrapolation), barren plateau analysis during training, hybrid quantum-classical architectures, and validation on diverse patient populations.
+Limitations include: (i) the VQC evaluation is simulation-based and does not capture device noise, (ii) feature engineering constrains the representational capacity compared to end-to-end CNNs, and (iii) the study focuses on binary AML vs. healthy classification rather than a full multi-class hematology taxonomy. Future work will evaluate shot-based sampling, noise-aware training, error mitigation, and hybrid models that combine classical feature extractors with quantum classifiers, as well as benchmarking on additional clinical datasets.
 
 
 % =======================
 % Conclusion (short)
 % =======================
 \section{Conclusion}
-We presented a comprehensive feasibility study of Quantum Machine Learning for medical image classification using Equilibrium Propagation (Quantum-inspired) and Variational Quantum Circuits (pure Quantum). Benchmarked on 18,365 clinical blood cell images for AML detection, EP achieved 86.4\% accuracy via energy-based learning avoiding backpropagation (incompatible with Quantum systems), while the 4-qubit VQC attained 83\% accuracy with remarkable data efficiency.
-
-Critically, VQC maintained 83\% accuracy with 5$\times$ fewer training samples than CNN—a practical quantum advantage addressing the annotation cost bottleneck in medical imaging (\$100--500 per expert-labeled image). The shallow 12-depth circuit design fits current NISQ hardware constraints, enabling near-term experimental validation on IBM Quantum or IonQ systems. These results establish reproducible baselines for Quantum Machine Learning in healthcare, motivating hardware deployment studies with noise-aware training and error mitigation.
+We benchmarked equilibrium propagation and a 4-qubit variational quantum classifier for AML detection from blood cell microscopy images. EP achieved up to 86.4\% accuracy with efficient inference, while the simulated VQC achieved 83.0\% accuracy with stable behavior across dataset scales. These results provide a practical benchmark for QML and quantum-inspired learning algorithms in medical image analysis and motivate follow-on studies on noisy quantum hardware.
 
 
 % =======================

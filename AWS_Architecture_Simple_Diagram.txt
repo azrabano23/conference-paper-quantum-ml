@@ -1,0 +1,113 @@
+ENDODETECT AI - AWS ARCHITECTURE DIAGRAM
+=========================================
+
+┌────────────────────────────────────────────────────────────────┐
+│                     RESEARCH TEAM ACCESS                        │
+│         (Students, Clinicians, Data Scientists)                │
+└───────────────────────┬────────────────────────────────────────┘
+                        │
+                        │ HTTPS/TLS
+                        ▼
+┌────────────────────────────────────────────────────────────────┐
+│                   AWS API GATEWAY + LAMBDA                      │
+│  • Upload de-identified images                                 │
+│  • Trigger model inference                                     │
+│  • Retrieve segmentation results                               │
+└──────────┬─────────────────────────────────────┬───────────────┘
+           │                                     │
+           ▼                                     ▼
+┌──────────────────────────┐      ┌─────────────────────────────┐
+│      AWS S3 STORAGE      │      │    COMPUTE (GPU Training)   │
+│ ┌──────────────────────┐ │      │ ┌─────────────────────────┐ │
+│ │ • MRI images (DICOM) │ │      │ │   AWS EC2 (p3/g4dn)     │ │
+│ │ • TVUS images        │ │      │ │   - NVIDIA GPU          │ │
+│ │ • Segmentation masks │ │      │ │   - nnU-Net training    │ │
+│ │ • Model checkpoints  │ │      │ │   - PyTorch/TensorFlow  │ │
+│ │                      │ │      │ └─────────────────────────┘ │
+│ │ [ENCRYPTED AT REST]  │ │      │           OR                │
+│ │ [NO PUBLIC ACCESS]   │ │      │ ┌─────────────────────────┐ │
+│ │ [VERSION CONTROLLED] │ │      │ │   AWS SAGEMAKER         │ │
+│ └──────────────────────┘ │      │ │   - Managed training    │ │
+│                          │      │ │   - Experiment tracking │ │
+│  Estimated: 40-100 GB    │      │ │   - Model registry      │ │
+└──────────┬───────────────┘      │ └─────────────────────────┘ │
+           │                      │                             │
+           │                      │  Estimated: 200 GPU hours   │
+           └──────────┬───────────┴─────────────────────────────┘
+                      │
+                      ▼
+          ┌─────────────────────────┐
+          │   METADATA DATABASE     │
+          │  (RDS or DynamoDB)      │
+          │ • Patient IDs (hashed)  │
+          │ • Model performance     │
+          │ • Experiment logs       │
+          │ • Annotation tracking   │
+          └─────────────────────────┘
+
+
+DATA FLOW (Training Pipeline)
+==============================
+
+1. [Clinician] → Uploads de-identified MRI → [S3 Bucket]
+                                              ↓
+2. [Data Scientist] → Triggers training → [SageMaker/EC2]
+                                              ↓
+                                    Trains nnU-Net model
+                                              ↓
+3. Model outputs → Segmentation masks → Saved to [S3]
+                                              ↓
+4. Performance metrics → Logged to → [RDS/DynamoDB]
+                                              ↓
+5. [Frontend Demo] ← Fetches results ← [API Gateway]
+
+
+KEY SECURITY FEATURES
+=====================
+
+✓ All data de-identified (no PHI)
+✓ S3 encryption at rest (AES-256)
+✓ HTTPS/TLS for data in transit
+✓ IAM role-based access control
+✓ VPC isolation for compute resources
+✓ CloudTrail audit logging
+✓ MFA enforcement for admin access
+
+
+WHY WE NEED EACH COMPONENT
+===========================
+
+S3:          Store 40GB of medical images securely
+EC2/SageMaker: Train deep learning models (requires GPU)
+Lambda/API:   Connect frontend to backend without managing servers
+RDS:          Track experiments and model versions (reproducibility)
+IAM:          Control who accesses what (HIPAA compliance)
+
+
+COST BREAKDOWN (3 months)
+==========================
+
+S3 Storage:           $3-6
+GPU Training:         $600-1,000
+Lambda/API Gateway:   $30-60
+RDS Database:         $45-60
+Data Transfer:        $60-150
+──────────────────────────────
+TOTAL:                $750-1,200
+
+
+CRITICAL PATH TO JAN 23 PITCH
+==============================
+
+Without AWS → Cannot train models → No real outputs → Static demo
+With AWS    → Train nnU-Net → Generate heat maps → Live demo
+
+
+PROJECT SCOPE
+=============
+
+✓ Research prototype for model development
+✓ Internal validation with 30-80 patient dataset
+✓ Support Maternal Health Awareness Day competition
+✗ NOT for clinical deployment
+✗ NOT patient-facing application
