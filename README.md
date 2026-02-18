@@ -25,4 +25,3 @@ pdflatex paper.tex
 ```
 
 Or use Overleaf/TeXShop to compile `paper.tex`.
-Good luck with your paper! You have a solid draft ready to refine.
