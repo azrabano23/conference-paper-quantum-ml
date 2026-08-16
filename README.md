@@ -25,3 +25,4 @@ pdflatex paper.tex
 ```
 
 Or use Overleaf/TeXShop to compile `paper.tex`.
+
